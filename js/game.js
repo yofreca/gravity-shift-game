@@ -23,6 +23,16 @@ class GameScene extends Phaser.Scene {
         this.load.json('level-1-2', 'assets/levels/1-2.json');
         this.load.json('level-1-3', 'assets/levels/1-3.json');
         this.load.json('level-1-4', 'assets/levels/1-4.json');
+        this.load.json('level-1-5', 'assets/levels/1-5.json');
+        this.load.json('level-1-6', 'assets/levels/1-6.json');
+        this.load.json('level-1-7', 'assets/levels/1-7.json');
+        this.load.json('level-1-8', 'assets/levels/1-8.json');
+        this.load.json('level-1-9', 'assets/levels/1-9.json');
+        this.load.json('level-1-10', 'assets/levels/1-10.json');
+        this.load.json('level-1-11', 'assets/levels/1-11.json');
+        this.load.json('level-1-12', 'assets/levels/1-12.json');
+        this.load.json('level-1-13', 'assets/levels/1-13.json');
+        this.load.json('level-1-14', 'assets/levels/1-14.json');
     }
 
     create() {
@@ -169,8 +179,12 @@ class GameScene extends Phaser.Scene {
     }
 
     getLevelData(index) {
-        // Available levels
-        const levelKeys = ['level-1-1', 'level-1-2', 'level-1-3', 'level-1-4'];
+        // Available levels (World 1 - 14 levels)
+        const levelKeys = [
+            'level-1-1', 'level-1-2', 'level-1-3', 'level-1-4', 'level-1-5',
+            'level-1-6', 'level-1-7', 'level-1-8', 'level-1-9', 'level-1-10',
+            'level-1-11', 'level-1-12', 'level-1-13', 'level-1-14'
+        ];
 
         // Get level key (loop if index exceeds available levels)
         const levelKey = levelKeys[index % levelKeys.length];
