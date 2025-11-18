@@ -33,6 +33,6 @@ window.addEventListener('keydown', function(e) {
 
 console.log('🎮 Gravity Shift loaded successfully!');
 console.log('Controls:');
-console.log('  WASD / Arrow Keys - Change gravity direction');
+console.log('  ↑↓←→ Arrow Keys (or WASD) - Change gravity direction');
 console.log('  R - Restart level');
 console.log('  SPACE - Next level (when complete)');

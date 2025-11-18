@@ -78,8 +78,8 @@ class GameScene extends Phaser.Scene {
 
         // Instructions
         this.instructionsText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT - padding,
-            'Control GRAVITY direction with WASD/Arrows | R: Restart', {
-            fontSize: '14px',
+            'Use ARROW KEYS ↑↓←→ to control GRAVITY | R: Restart', {
+            fontSize: '16px',
             fontFamily: 'Arial',
             color: '#FFFF00',
             stroke: '#000000',

@@ -9,19 +9,19 @@ Un juego de puzzle basado en física donde controlas la dirección de la graveda
 En Gravity Shift, **controlas la dirección de la GRAVEDAD**, no la bola. La bola se mueve según las leyes de la física dependiendo de la dirección de gravedad que establezcas.
 
 ### 💡 Ejemplo:
-- Presionas **W** → La gravedad apunta hacia ARRIBA → La bola "cae" hacia arriba
-- Presionas **A** → La gravedad apunta hacia la IZQUIERDA → La bola "cae" hacia la izquierda
-- Presionas **S** → La gravedad apunta hacia ABAJO → La bola cae normalmente
+- Presionas **↑** (flecha arriba) → La gravedad apunta hacia ARRIBA → La bola "cae" hacia arriba
+- Presionas **←** (flecha izquierda) → La gravedad apunta hacia la IZQUIERDA → La bola "cae" hacia la izquierda
+- Presionas **↓** (flecha abajo) → La gravedad apunta hacia ABAJO → La bola cae normalmente
 
 **Observa el indicador dorado en la parte superior** que muestra la dirección actual de la gravedad (↓ DOWN, ↑ UP, ← LEFT, → RIGHT).
 
 ## 🎮 Controles
 
-- **WASD / Flechas**: Cambiar dirección de la gravedad
-  - W/↑: Gravedad hacia arriba
-  - S/↓: Gravedad hacia abajo
-  - A/←: Gravedad hacia la izquierda
-  - D/→: Gravedad hacia la derecha
+- **Flechas del Teclado ↑↓←→** (o WASD): Cambiar dirección de la gravedad
+  - ↑ (o W): Gravedad hacia arriba
+  - ↓ (o S): Gravedad hacia abajo
+  - ← (o A): Gravedad hacia la izquierda
+  - → (o D): Gravedad hacia la derecha
 - **R**: Reiniciar nivel
 - **SPACE**: Siguiente nivel (cuando se completa)
 
@@ -29,11 +29,13 @@ En Gravity Shift, **controlas la dirección de la GRAVEDAD**, no la bola. La bol
 
 1. Abre `index.html` en un navegador web moderno
 2. **Observa** la bola azul cayendo por gravedad
-3. **Presiona WASD o flechas** para cambiar la dirección de la gravedad
+3. **Presiona las FLECHAS del teclado ↑↓←→** para cambiar la dirección de la gravedad
 4. **Mira el indicador dorado** en la parte superior para ver la gravedad actual
 5. Usa la gravedad para guiar la bola hasta el cuadrado verde (meta)
 6. Recolecta estrellas doradas para puntos extra
 7. Evita los pinchos rojos y zonas naranjas de peligro
+
+💡 **Tip:** También puedes usar WASD si prefieres controles de estilo gamer.
 
 ## 🎯 Objetivo
 
