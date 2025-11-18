@@ -238,6 +238,13 @@ class GameScene extends Phaser.Scene {
     }
 
     update(time, delta) {
+        // Handle next level (must be before levelComplete check)
+        if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE) && this.levelComplete) {
+            this.nextLevel();
+            return;
+        }
+
+        // If level is complete, don't update game logic
         if (this.levelComplete) return;
 
         // Handle gravity input
@@ -261,11 +268,6 @@ class GameScene extends Phaser.Scene {
         // Handle restart
         if (Phaser.Input.Keyboard.JustDown(this.keys.R)) {
             this.loadCurrentLevel();
-        }
-
-        // Handle next level (for testing)
-        if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE) && this.levelComplete) {
-            this.nextLevel();
         }
     }
 
