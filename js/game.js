@@ -10,6 +10,11 @@ class GameScene extends Phaser.Scene {
         this.totalStars = 0;
         this.timer = 0;
         this.levelComplete = false;
+
+        // Completion UI elements
+        this.completionText = null;
+        this.completionStats = null;
+        this.completionNextText = null;
     }
 
     preload() {
@@ -136,6 +141,9 @@ class GameScene extends Phaser.Scene {
     }
 
     loadCurrentLevel() {
+        // Clear completion UI from previous level
+        this.clearCompletionUI();
+
         // Get level data
         const levelData = this.getLevelData(this.currentLevelIndex);
 
@@ -290,7 +298,7 @@ class GameScene extends Phaser.Scene {
         console.log('🎉 Level Complete! Press SPACE to continue...');
 
         // Show completion message
-        const completionText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2,
+        this.completionText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2,
             'Level Complete!', {
             fontSize: '48px',
             fontFamily: 'Arial',
@@ -299,7 +307,7 @@ class GameScene extends Phaser.Scene {
             strokeThickness: 6
         }).setOrigin(0.5);
 
-        const statsText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 60,
+        this.completionStats = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 60,
             `Time: ${this.timer.toFixed(2)}s | Stars: ${this.starsCollected}/${this.totalStars}`, {
             fontSize: '24px',
             fontFamily: 'Arial',
@@ -308,7 +316,7 @@ class GameScene extends Phaser.Scene {
             strokeThickness: 4
         }).setOrigin(0.5);
 
-        const nextText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 100,
+        this.completionNextText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 100,
             'Press SPACE for next level', {
             fontSize: '18px',
             fontFamily: 'Arial',
@@ -319,12 +327,28 @@ class GameScene extends Phaser.Scene {
 
         // Pulsing animation
         this.tweens.add({
-            targets: completionText,
+            targets: this.completionText,
             scale: 1.1,
             duration: 500,
             yoyo: true,
             repeat: -1
         });
+    }
+
+    clearCompletionUI() {
+        // Destroy completion text elements
+        if (this.completionText) {
+            this.completionText.destroy();
+            this.completionText = null;
+        }
+        if (this.completionStats) {
+            this.completionStats.destroy();
+            this.completionStats = null;
+        }
+        if (this.completionNextText) {
+            this.completionNextText.destroy();
+            this.completionNextText = null;
+        }
     }
 
     nextLevel() {
