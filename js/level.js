@@ -6,7 +6,9 @@ class LevelManager {
         this.platforms = [];
         this.hazards = [];
         this.collectibles = [];
+        this.portals = [];
         this.goal = null;
+        this.lastTeleportTime = 0;
     }
 
     loadLevel(levelData) {
@@ -36,6 +38,13 @@ class LevelManager {
         if (levelData.stars) {
             levelData.stars.forEach(star => {
                 this.createStar(star.x, star.y);
+            });
+        }
+
+        // Create portals
+        if (levelData.portals) {
+            levelData.portals.forEach((portal, index) => {
+                this.createPortal(portal.x, portal.y, index);
             });
         }
 
@@ -186,6 +195,56 @@ class LevelManager {
         this.collectibles.push(star);
     }
 
+    createPortal(x, y, index) {
+        const radius = CONFIG.PORTAL.RADIUS;
+        const color = index % 2 === 0 ? CONFIG.PORTAL.COLOR_A : CONFIG.PORTAL.COLOR_B;
+
+        const portal = {
+            body: this.scene.matter.add.circle(
+                x, y, radius,
+                {
+                    isStatic: true,
+                    isSensor: true,
+                    label: 'portal'
+                }
+            ),
+            graphics: null,
+            index: index,
+            x: x,
+            y: y
+        };
+
+        // Create portal visual (circular with glow)
+        const graphics = this.scene.add.graphics();
+
+        // Outer glow
+        graphics.fillStyle(color, 0.3);
+        graphics.fillCircle(x, y, radius + 8);
+
+        // Main portal
+        graphics.fillStyle(color, 0.8);
+        graphics.fillCircle(x, y, radius);
+
+        // Inner bright circle
+        graphics.fillStyle(CONFIG.PORTAL.GLOW_COLOR, 0.5);
+        graphics.fillCircle(x, y, radius / 2);
+
+        portal.graphics = graphics;
+
+        // Pulsing animation
+        this.scene.tweens.add({
+            targets: graphics,
+            alpha: 0.7,
+            scale: 1.1,
+            duration: 1500,
+            yoyo: true,
+            repeat: -1,
+            ease: 'Sine.easeInOut'
+        });
+
+        this.portals.push(portal);
+    }
+
     clearLevel() {
         // Destroy all platforms
         this.platforms.forEach(platform => {
@@ -208,6 +267,13 @@ class LevelManager {
         });
         this.collectibles = [];
 
+        // Destroy portals
+        this.portals.forEach(portal => {
+            if (portal.graphics) portal.graphics.destroy();
+            if (portal.body) this.scene.matter.world.remove(portal.body);
+        });
+        this.portals = [];
+
         // Destroy goal
         if (this.goal) {
             if (this.goal.graphics) this.goal.graphics.destroy();
@@ -217,6 +283,25 @@ class LevelManager {
     }
 
     checkCollisions(player) {
+        // Check portal collisions (with cooldown to prevent loops)
+        const currentTime = this.scene.time.now;
+        if (currentTime - this.lastTeleportTime > CONFIG.PORTAL.TELEPORT_COOLDOWN) {
+            for (let i = 0; i < this.portals.length; i++) {
+                const portal = this.portals[i];
+                if (this.scene.matter.overlap(player.ball, [portal.body])) {
+                    // Find paired portal (even pairs with odd, odd pairs with even)
+                    const pairedIndex = portal.index % 2 === 0 ? portal.index + 1 : portal.index - 1;
+                    const pairedPortal = this.portals.find(p => p.index === pairedIndex);
+
+                    if (pairedPortal) {
+                        this.teleportPlayer(player, pairedPortal);
+                        this.lastTeleportTime = currentTime;
+                        return 'portal';
+                    }
+                }
+            }
+        }
+
         // Check goal collision
         if (this.goal && this.scene.matter.overlap(player.ball, [this.goal.body])) {
             this.scene.events.emit('levelComplete');
@@ -237,6 +322,30 @@ class LevelManager {
         });
 
         return null;
+    }
+
+    teleportPlayer(player, targetPortal) {
+        // Get current velocity
+        const velocity = player.ball.velocity;
+
+        // Teleport to target portal
+        this.scene.matter.body.setPosition(player.ball, {
+            x: targetPortal.x,
+            y: targetPortal.y
+        });
+
+        // Maintain velocity (important for momentum-based puzzles)
+        this.scene.matter.body.setVelocity(player.ball, velocity);
+
+        // Visual effect: flash at exit portal
+        this.scene.tweens.add({
+            targets: targetPortal.graphics,
+            scale: 1.5,
+            alpha: 1,
+            duration: 100,
+            yoyo: true,
+            ease: 'Power2'
+        });
     }
 
     collectStar(star) {

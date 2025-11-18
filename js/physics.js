@@ -20,10 +20,6 @@ class PhysicsManager {
             direction.y * this.gravityMagnitude
         );
 
-        // Debug: log gravity change
-        console.log('🔄 Gravity changed to:', direction,
-                    'Applied:', direction.x * this.gravityMagnitude, direction.y * this.gravityMagnitude);
-
         // Emit gravity change event
         this.scene.events.emit('gravityChanged', direction);
     }

@@ -12,10 +12,7 @@ const gameConfig = {
                 x: 0,
                 y: 1  // Will be overridden by PhysicsManager
             },
-            debug: true, // Enable for physics debugging
-            debugBodyColor: 0xff00ff,
-            debugShowBody: true,
-            debugShowStaticBody: true
+            debug: false
         }
     },
     scene: [GameScene]
@@ -31,9 +28,3 @@ window.addEventListener('keydown', function(e) {
     }
     // Don't prevent SPACE - let it through to Phaser
 }, false);
-
-console.log('🎮 Gravity Shift loaded successfully!');
-console.log('Controls:');
-console.log('  ↑↓←→ Arrow Keys (or WASD) - Change gravity direction');
-console.log('  R - Restart level');
-console.log('  SPACE - Next level (when complete)');

@@ -52,6 +52,15 @@ const CONFIG = {
     // Goal
     GOAL_COLOR: 0x2ECC71,
 
+    // Portals
+    PORTAL: {
+        RADIUS: 25,
+        COLOR_A: 0x9B59B6,  // Purple
+        COLOR_B: 0xE74C3C,  // Red
+        GLOW_COLOR: 0xFFFFFF,
+        TELEPORT_COOLDOWN: 500 // milliseconds to prevent teleport loops
+    },
+
     // Gravity directions
     GRAVITY_DIRECTIONS: {
         DOWN: { x: 0, y: 1 },

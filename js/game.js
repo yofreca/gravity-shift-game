@@ -49,11 +49,6 @@ class GameScene extends Phaser.Scene {
         // Setup event listeners
         this.events.on('levelComplete', this.onLevelComplete, this);
         this.events.on('starCollected', this.onStarCollected, this);
-
-        // Debug: Log when SPACE is pressed
-        this.keys.SPACE.on('down', () => {
-            console.log('⌨️ SPACE key detected! levelComplete:', this.levelComplete);
-        });
     }
 
     createHUD() {
@@ -244,6 +239,31 @@ class GameScene extends Phaser.Scene {
                     { type: 'spikes', x: 300, y: 560, width: 100, height: 20 },
                     { type: 'spikes', x: 500, y: 560, width: 100, height: 20 }
                 ]
+            },
+            {
+                levelId: '1-4',
+                world: 1,
+                level: 4,
+                name: 'Portal Test',
+                startPosition: { x: 100, y: 500 },
+                goalPosition: { x: 700, y: 100 },
+                stars: [
+                    { x: 400, y: 500 }
+                ],
+                platforms: [
+                    { type: 'normal', x: 0, y: 580, width: 800, height: 20 },
+                    { type: 'normal', x: 0, y: 0, width: 20, height: 600 },
+                    { type: 'normal', x: 780, y: 0, width: 20, height: 600 },
+                    { type: 'normal', x: 0, y: 0, width: 800, height: 20 },
+                    { type: 'normal', x: 50, y: 450, width: 150, height: 20 },
+                    { type: 'normal', x: 300, y: 300, width: 200, height: 20 },
+                    { type: 'normal', x: 600, y: 150, width: 150, height: 20 }
+                ],
+                portals: [
+                    { x: 150, y: 400 },
+                    { x: 400, y: 250 }
+                ],
+                hazards: []
             }
         ];
 
@@ -254,7 +274,6 @@ class GameScene extends Phaser.Scene {
         // Handle next level (must be before levelComplete check)
         if (this.levelComplete) {
             if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
-                console.log('🎮 SPACE pressed! Moving to next level...');
                 this.nextLevel();
                 return;
             }
@@ -295,7 +314,6 @@ class GameScene extends Phaser.Scene {
         if (this.levelComplete) return;
 
         this.levelComplete = true;
-        console.log('🎉 Level Complete! Press SPACE to continue...');
 
         // Show completion message
         this.completionText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2,
