@@ -10,9 +10,9 @@ const gameConfig = {
         matter: {
             gravity: {
                 x: 0,
-                y: 1
+                y: 1  // Will be overridden by PhysicsManager
             },
-            debug: false, // Set to true for physics debugging
+            debug: true, // Enable for physics debugging
             debugBodyColor: 0xff00ff,
             debugShowBody: true,
             debugShowStaticBody: true

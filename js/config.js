@@ -5,7 +5,7 @@ const CONFIG = {
     HEIGHT: 600,
 
     // Physics constants
-    GRAVITY: 980, // 9.8 units/s² * 100 for pixel scale
+    GRAVITY: 1, // Matter.js gravity (1 = normal, ~60fps)
     BALL_RADIUS: 15,
     BALL_MASS: 1.0,
     FRICTION: 0.3,
