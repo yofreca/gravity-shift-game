@@ -78,21 +78,21 @@ class GameScene extends Phaser.Scene {
 
         // Instructions
         this.instructionsText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT - padding,
-            'WASD/Arrows: Change Gravity | R: Restart', {
+            'Control GRAVITY direction with WASD/Arrows | R: Restart', {
             fontSize: '14px',
             fontFamily: 'Arial',
-            color: '#ffffff',
+            color: '#FFFF00',
             stroke: '#000000',
             strokeThickness: 2
         }).setOrigin(0.5, 1);
 
-        // Gravity indicator
-        this.gravityIndicator = this.add.text(CONFIG.WIDTH / 2, padding, '↓', {
-            fontSize: '32px',
+        // Gravity indicator (LARGE and prominent)
+        this.gravityIndicator = this.add.text(CONFIG.WIDTH / 2, padding, '↓ GRAVITY', {
+            fontSize: '48px',
             fontFamily: 'Arial',
-            color: '#ffffff',
+            color: '#FFD700',
             stroke: '#000000',
-            strokeThickness: 4
+            strokeThickness: 6
         }).setOrigin(0.5, 0);
 
         // Listen for gravity changes
@@ -101,14 +101,33 @@ class GameScene extends Phaser.Scene {
 
     updateGravityIndicator(direction) {
         const arrows = {
-            '0,1': '↓',
-            '0,-1': '↑',
-            '-1,0': '←',
-            '1,0': '→'
+            '0,1': '↓ DOWN',
+            '0,-1': '↑ UP',
+            '-1,0': '← LEFT',
+            '1,0': '→ RIGHT'
         };
 
         const key = `${direction.x},${direction.y}`;
-        this.gravityIndicator.setText(arrows[key] || '?');
+        this.gravityIndicator.setText(arrows[key] || '? UNKNOWN');
+
+        // Flash effect when gravity changes
+        this.gravityIndicator.setScale(1.2);
+        this.gravityIndicator.setTint(0x00FF00);
+
+        this.tweens.add({
+            targets: this.gravityIndicator,
+            scale: 1,
+            duration: 200,
+            ease: 'Back.out'
+        });
+
+        this.tweens.add({
+            targets: this.gravityIndicator,
+            duration: 200,
+            onComplete: () => {
+                this.gravityIndicator.clearTint();
+            }
+        });
     }
 
     loadCurrentLevel() {
