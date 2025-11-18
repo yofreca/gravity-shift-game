@@ -44,11 +44,6 @@ class GameScene extends Phaser.Scene {
         // Setup event listeners
         this.events.on('levelComplete', this.onLevelComplete, this);
         this.events.on('starCollected', this.onStarCollected, this);
-
-        // Create placeholder sound effects
-        if (!this.sound.sounds.find(s => s.key === 'gravityChange')) {
-            this.sound.add('gravityChange', { volume: 0 }); // Silent placeholder
-        }
     }
 
     createHUD() {

@@ -36,18 +36,25 @@ class PhysicsManager {
         if (Phaser.Input.Keyboard.JustDown(cursors.up) ||
             Phaser.Input.Keyboard.JustDown(keys.W)) {
             this.setGravity(CONFIG.GRAVITY_DIRECTIONS.UP);
-            this.scene.sound.play('gravityChange', { volume: 0.3 });
+            this.playGravitySound();
         } else if (Phaser.Input.Keyboard.JustDown(cursors.down) ||
                    Phaser.Input.Keyboard.JustDown(keys.S)) {
             this.setGravity(CONFIG.GRAVITY_DIRECTIONS.DOWN);
-            this.scene.sound.play('gravityChange', { volume: 0.3 });
+            this.playGravitySound();
         } else if (Phaser.Input.Keyboard.JustDown(cursors.left) ||
                    Phaser.Input.Keyboard.JustDown(keys.A)) {
             this.setGravity(CONFIG.GRAVITY_DIRECTIONS.LEFT);
-            this.scene.sound.play('gravityChange', { volume: 0.3 });
+            this.playGravitySound();
         } else if (Phaser.Input.Keyboard.JustDown(cursors.right) ||
                    Phaser.Input.Keyboard.JustDown(keys.D)) {
             this.setGravity(CONFIG.GRAVITY_DIRECTIONS.RIGHT);
+            this.playGravitySound();
+        }
+    }
+
+    playGravitySound() {
+        // Only play sound if it exists in cache
+        if (this.scene.cache.audio.exists('gravityChange')) {
             this.scene.sound.play('gravityChange', { volume: 0.3 });
         }
     }
