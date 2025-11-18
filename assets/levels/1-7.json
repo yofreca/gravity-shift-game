@@ -1,0 +1,32 @@
+{
+  "levelId": "1-7",
+  "world": 1,
+  "level": 7,
+  "name": "Portal Maze",
+  "startPosition": { "x": 100, "y": 500 },
+  "goalPosition": { "x": 700, "y": 500 },
+  "stars": [
+    { "x": 400, "y": 300 },
+    { "x": 150, "y": 100 }
+  ],
+  "platforms": [
+    { "type": "normal", "x": 0, "y": 580, "width": 800, "height": 20 },
+    { "type": "normal", "x": 0, "y": 0, "width": 20, "height": 600 },
+    { "type": "normal", "x": 780, "y": 0, "width": 20, "height": 600 },
+    { "type": "normal", "x": 0, "y": 0, "width": 800, "height": 20 },
+    { "type": "normal", "x": 50, "y": 450, "width": 100, "height": 20 },
+    { "type": "normal", "x": 350, "y": 350, "width": 100, "height": 20 },
+    { "type": "normal", "x": 100, "y": 150, "width": 100, "height": 20 },
+    { "type": "normal", "x": 600, "y": 450, "width": 150, "height": 20 },
+    { "type": "normal", "x": 400, "y": 150, "width": 200, "height": 20 }
+  ],
+  "portals": [
+    { "x": 100, "y": 400 },
+    { "x": 400, "y": 300 },
+    { "x": 150, "y": 100 },
+    { "x": 650, "y": 100 }
+  ],
+  "hazards": [
+    { "type": "spikes", "x": 250, "y": 560, "width": 300, "height": 20 }
+  ]
+}

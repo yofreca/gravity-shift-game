@@ -1,0 +1,299 @@
+// Main Game Scene
+class GameScene extends Phaser.Scene {
+    constructor() {
+        super({ key: 'GameScene' });
+        this.player = null;
+        this.physicsManager = null;
+        this.levelManager = null;
+        this.currentLevelIndex = 0;
+        this.starsCollected = 0;
+        this.totalStars = 0;
+        this.timer = 0;
+        this.levelComplete = false;
+
+        // Completion UI elements
+        this.completionText = null;
+        this.completionStats = null;
+        this.completionNextText = null;
+    }
+
+    preload() {
+        // Preload level data from JSON files
+        this.load.json('level-1-1', 'assets/levels/1-1.json');
+        this.load.json('level-1-2', 'assets/levels/1-2.json');
+        this.load.json('level-1-3', 'assets/levels/1-3.json');
+        this.load.json('level-1-4', 'assets/levels/1-4.json');
+        this.load.json('level-1-5', 'assets/levels/1-5.json');
+        this.load.json('level-1-6', 'assets/levels/1-6.json');
+        this.load.json('level-1-7', 'assets/levels/1-7.json');
+        this.load.json('level-1-8', 'assets/levels/1-8.json');
+        this.load.json('level-1-9', 'assets/levels/1-9.json');
+        this.load.json('level-1-10', 'assets/levels/1-10.json');
+        this.load.json('level-1-11', 'assets/levels/1-11.json');
+        this.load.json('level-1-12', 'assets/levels/1-12.json');
+        this.load.json('level-1-13', 'assets/levels/1-13.json');
+        this.load.json('level-1-14', 'assets/levels/1-14.json');
+    }
+
+    create() {
+        // Initialize managers
+        this.physicsManager = new PhysicsManager(this);
+        this.levelManager = new LevelManager(this);
+
+        // Setup input
+        this.cursors = this.input.keyboard.createCursorKeys();
+        this.keys = {
+            W: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W),
+            A: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.A),
+            S: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.S),
+            D: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D),
+            R: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R),
+            SPACE: this.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE)
+        };
+
+        // Initialize physics
+        this.physicsManager.init();
+
+        // Create HUD
+        this.createHUD();
+
+        // Load first level
+        this.loadCurrentLevel();
+
+        // Setup event listeners
+        this.events.on('levelComplete', this.onLevelComplete, this);
+        this.events.on('starCollected', this.onStarCollected, this);
+    }
+
+    createHUD() {
+        const padding = 20;
+
+        // Level info
+        this.levelText = this.add.text(padding, padding, 'Level: 1-1', {
+            fontSize: '20px',
+            fontFamily: 'Arial',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3
+        });
+
+        // Stars counter
+        this.starsText = this.add.text(padding, padding + 30, 'Stars: 0/0', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#F1C40F',
+            stroke: '#000000',
+            strokeThickness: 3
+        });
+
+        // Timer
+        this.timerText = this.add.text(CONFIG.WIDTH - padding, padding, 'Time: 0.0s', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(1, 0);
+
+        // Instructions
+        this.instructionsText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT - padding,
+            'Use ARROW KEYS ↑↓←→ to control GRAVITY | R: Restart', {
+            fontSize: '16px',
+            fontFamily: 'Arial',
+            color: '#FFFF00',
+            stroke: '#000000',
+            strokeThickness: 2
+        }).setOrigin(0.5, 1);
+
+        // Gravity indicator (LARGE and prominent)
+        this.gravityIndicator = this.add.text(CONFIG.WIDTH / 2, padding, '↓ GRAVITY', {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#FFD700',
+            stroke: '#000000',
+            strokeThickness: 6
+        }).setOrigin(0.5, 0);
+
+        // Listen for gravity changes
+        this.events.on('gravityChanged', this.updateGravityIndicator, this);
+    }
+
+    updateGravityIndicator(direction) {
+        const arrows = {
+            '0,1': '↓ DOWN',
+            '0,-1': '↑ UP',
+            '-1,0': '← LEFT',
+            '1,0': '→ RIGHT'
+        };
+
+        const key = `${direction.x},${direction.y}`;
+        this.gravityIndicator.setText(arrows[key] || '? UNKNOWN');
+
+        // Flash effect when gravity changes
+        this.gravityIndicator.setScale(1.2);
+        this.gravityIndicator.setTint(0x00FF00);
+
+        this.tweens.add({
+            targets: this.gravityIndicator,
+            scale: 1,
+            duration: 200,
+            ease: 'Back.out'
+        });
+
+        this.tweens.add({
+            targets: this.gravityIndicator,
+            duration: 200,
+            onComplete: () => {
+                this.gravityIndicator.clearTint();
+            }
+        });
+    }
+
+    loadCurrentLevel() {
+        // Clear completion UI from previous level
+        this.clearCompletionUI();
+
+        // Get level data
+        const levelData = this.getLevelData(this.currentLevelIndex);
+
+        // Load level
+        const startPos = this.levelManager.loadLevel(levelData);
+
+        // Create or reset player
+        if (this.player) {
+            this.player.destroy();
+        }
+
+        this.player = new Player(this, startPos.x, startPos.y);
+
+        // Reset level state
+        this.starsCollected = 0;
+        this.totalStars = this.levelManager.getTotalStars();
+        this.timer = 0;
+        this.levelComplete = false;
+
+        // Update HUD
+        this.levelText.setText(`Level: ${levelData.levelId}`);
+        this.starsText.setText(`Stars: 0/${this.totalStars}`);
+        this.timerText.setText('Time: 0.0s');
+    }
+
+    getLevelData(index) {
+        // Available levels (World 1 - 14 levels)
+        const levelKeys = [
+            'level-1-1', 'level-1-2', 'level-1-3', 'level-1-4', 'level-1-5',
+            'level-1-6', 'level-1-7', 'level-1-8', 'level-1-9', 'level-1-10',
+            'level-1-11', 'level-1-12', 'level-1-13', 'level-1-14'
+        ];
+
+        // Get level key (loop if index exceeds available levels)
+        const levelKey = levelKeys[index % levelKeys.length];
+
+        // Return loaded JSON data
+        return this.cache.json.get(levelKey);
+    }
+
+    update(time, delta) {
+        // Handle next level (must be before levelComplete check)
+        if (this.levelComplete) {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
+                this.nextLevel();
+                return;
+            }
+            // Don't update game logic if level is complete
+            return;
+        }
+
+        // Handle gravity input
+        this.physicsManager.handleGravityInput();
+
+        // Update player
+        if (this.player) {
+            this.player.update();
+        }
+
+        // Check collisions
+        const collision = this.levelManager.checkCollisions(this.player);
+        if (collision === 'hazard') {
+            this.player.die();
+        }
+
+        // Update timer
+        this.timer += delta / 1000;
+        this.timerText.setText(`Time: ${this.timer.toFixed(1)}s`);
+
+        // Handle restart
+        if (Phaser.Input.Keyboard.JustDown(this.keys.R)) {
+            this.loadCurrentLevel();
+        }
+    }
+
+    onStarCollected() {
+        this.starsCollected = this.levelManager.getStarsCollected();
+        this.starsText.setText(`Stars: ${this.starsCollected}/${this.totalStars}`);
+    }
+
+    onLevelComplete() {
+        if (this.levelComplete) return;
+
+        this.levelComplete = true;
+
+        // Show completion message
+        this.completionText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2,
+            'Level Complete!', {
+            fontSize: '48px',
+            fontFamily: 'Arial',
+            color: '#2ECC71',
+            stroke: '#000000',
+            strokeThickness: 6
+        }).setOrigin(0.5);
+
+        this.completionStats = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 60,
+            `Time: ${this.timer.toFixed(2)}s | Stars: ${this.starsCollected}/${this.totalStars}`, {
+            fontSize: '24px',
+            fontFamily: 'Arial',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 4
+        }).setOrigin(0.5);
+
+        this.completionNextText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2 + 100,
+            'Press SPACE for next level', {
+            fontSize: '18px',
+            fontFamily: 'Arial',
+            color: '#ffffff',
+            stroke: '#000000',
+            strokeThickness: 3
+        }).setOrigin(0.5);
+
+        // Pulsing animation
+        this.tweens.add({
+            targets: this.completionText,
+            scale: 1.1,
+            duration: 500,
+            yoyo: true,
+            repeat: -1
+        });
+    }
+
+    clearCompletionUI() {
+        // Destroy completion text elements
+        if (this.completionText) {
+            this.completionText.destroy();
+            this.completionText = null;
+        }
+        if (this.completionStats) {
+            this.completionStats.destroy();
+            this.completionStats = null;
+        }
+        if (this.completionNextText) {
+            this.completionNextText.destroy();
+            this.completionNextText = null;
+        }
+    }
+
+    nextLevel() {
+        this.currentLevelIndex++;
+        this.loadCurrentLevel();
+    }
+}
