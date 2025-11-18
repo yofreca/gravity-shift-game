@@ -24,11 +24,12 @@ const gameConfig = {
 // Create game instance
 const game = new Phaser.Game(gameConfig);
 
-// Prevent arrow keys from scrolling the page
+// Prevent arrow keys from scrolling the page (but allow SPACE to reach Phaser)
 window.addEventListener('keydown', function(e) {
-    if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Space'].indexOf(e.code) > -1) {
+    if(['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].indexOf(e.code) > -1) {
         e.preventDefault();
     }
+    // Don't prevent SPACE - let it through to Phaser
 }, false);
 
 console.log('🎮 Gravity Shift loaded successfully!');
