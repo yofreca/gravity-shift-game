@@ -18,7 +18,11 @@ class GameScene extends Phaser.Scene {
     }
 
     preload() {
-        // Preload assets here (currently using graphics)
+        // Preload level data from JSON files
+        this.load.json('level-1-1', 'assets/levels/1-1.json');
+        this.load.json('level-1-2', 'assets/levels/1-2.json');
+        this.load.json('level-1-3', 'assets/levels/1-3.json');
+        this.load.json('level-1-4', 'assets/levels/1-4.json');
     }
 
     create() {
@@ -165,109 +169,14 @@ class GameScene extends Phaser.Scene {
     }
 
     getLevelData(index) {
-        // Return test levels for now
-        const testLevels = [
-            {
-                levelId: '1-1',
-                world: 1,
-                level: 1,
-                name: 'First Steps',
-                startPosition: { x: 100, y: 100 },
-                goalPosition: { x: 700, y: 500 },
-                stars: [
-                    { x: 300, y: 200 },
-                    { x: 500, y: 300 }
-                ],
-                platforms: [
-                    { type: 'normal', x: 0, y: 580, width: 800, height: 20 },
-                    { type: 'normal', x: 0, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 780, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 0, y: 0, width: 800, height: 20 },
-                    { type: 'normal', x: 200, y: 400, width: 200, height: 20 }
-                ],
-                hazards: []
-            },
-            {
-                levelId: '1-2',
-                world: 1,
-                level: 2,
-                name: 'Ice Slide',
-                startPosition: { x: 100, y: 100 },
-                goalPosition: { x: 700, y: 100 },
-                stars: [
-                    { x: 400, y: 300 },
-                    { x: 600, y: 450 }
-                ],
-                platforms: [
-                    { type: 'normal', x: 0, y: 580, width: 800, height: 20 },
-                    { type: 'normal', x: 0, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 780, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 0, y: 0, width: 800, height: 20 },
-                    { type: 'ice', x: 150, y: 200, width: 500, height: 20 },
-                    { type: 'normal', x: 50, y: 150, width: 100, height: 20 },
-                    { type: 'normal', x: 650, y: 150, width: 100, height: 20 }
-                ],
-                hazards: [
-                    { type: 'spikes', x: 300, y: 560, width: 200, height: 20 }
-                ]
-            },
-            {
-                levelId: '1-3',
-                world: 1,
-                level: 3,
-                name: 'Gravity Maze',
-                startPosition: { x: 100, y: 500 },
-                goalPosition: { x: 700, y: 100 },
-                stars: [
-                    { x: 400, y: 300 },
-                    { x: 650, y: 500 },
-                    { x: 150, y: 200 }
-                ],
-                platforms: [
-                    { type: 'normal', x: 0, y: 580, width: 800, height: 20 },
-                    { type: 'normal', x: 0, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 780, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 0, y: 0, width: 800, height: 20 },
-                    { type: 'normal', x: 50, y: 450, width: 200, height: 20 },
-                    { type: 'normal', x: 350, y: 350, width: 100, height: 20 },
-                    { type: 'sticky', x: 550, y: 450, width: 200, height: 20 },
-                    { type: 'normal', x: 100, y: 250, width: 150, height: 20 },
-                    { type: 'bounce', x: 500, y: 150, width: 100, height: 20 },
-                    { type: 'normal', x: 650, y: 150, width: 100, height: 20 }
-                ],
-                hazards: [
-                    { type: 'spikes', x: 300, y: 560, width: 100, height: 20 },
-                    { type: 'spikes', x: 500, y: 560, width: 100, height: 20 }
-                ]
-            },
-            {
-                levelId: '1-4',
-                world: 1,
-                level: 4,
-                name: 'Portal Test',
-                startPosition: { x: 100, y: 500 },
-                goalPosition: { x: 700, y: 100 },
-                stars: [
-                    { x: 400, y: 500 }
-                ],
-                platforms: [
-                    { type: 'normal', x: 0, y: 580, width: 800, height: 20 },
-                    { type: 'normal', x: 0, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 780, y: 0, width: 20, height: 600 },
-                    { type: 'normal', x: 0, y: 0, width: 800, height: 20 },
-                    { type: 'normal', x: 50, y: 450, width: 150, height: 20 },
-                    { type: 'normal', x: 300, y: 300, width: 200, height: 20 },
-                    { type: 'normal', x: 600, y: 150, width: 150, height: 20 }
-                ],
-                portals: [
-                    { x: 150, y: 400 },
-                    { x: 400, y: 250 }
-                ],
-                hazards: []
-            }
-        ];
+        // Available levels
+        const levelKeys = ['level-1-1', 'level-1-2', 'level-1-3', 'level-1-4'];
 
-        return testLevels[index % testLevels.length];
+        // Get level key (loop if index exceeds available levels)
+        const levelKey = levelKeys[index % levelKeys.length];
+
+        // Return loaded JSON data
+        return this.cache.json.get(levelKey);
     }
 
     update(time, delta) {

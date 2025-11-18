@@ -1,0 +1,20 @@
+{
+  "levelId": "1-1",
+  "world": 1,
+  "level": 1,
+  "name": "First Steps",
+  "startPosition": { "x": 100, "y": 100 },
+  "goalPosition": { "x": 700, "y": 500 },
+  "stars": [
+    { "x": 300, "y": 200 },
+    { "x": 500, "y": 300 }
+  ],
+  "platforms": [
+    { "type": "normal", "x": 0, "y": 580, "width": 800, "height": 20 },
+    { "type": "normal", "x": 0, "y": 0, "width": 20, "height": 600 },
+    { "type": "normal", "x": 780, "y": 0, "width": 20, "height": 600 },
+    { "type": "normal", "x": 0, "y": 0, "width": 800, "height": 20 },
+    { "type": "normal", "x": 200, "y": 400, "width": 200, "height": 20 }
+  ],
+  "hazards": []
+}
