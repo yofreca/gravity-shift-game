@@ -20,12 +20,10 @@ class Player {
                 frictionAir: 0.01,
                 restitution: CONFIG.RESTITUTION,
                 density: 0.001,
-                label: 'player'
+                label: 'player',
+                sleepThreshold: -1  // Prevent ball from sleeping
             }
         );
-
-        // Make ball always active
-        this.ball.setSleepThreshold(-1);
     }
 
     createVisuals() {
