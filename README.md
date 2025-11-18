@@ -2,6 +2,19 @@
 
 Un juego de puzzle basado en física donde controlas la dirección de la gravedad para guiar una bola hasta la meta.
 
+## ⚠️ IMPORTANTE: Cómo Funciona el Juego
+
+**NO CONTROLAS LA BOLA DIRECTAMENTE.**
+
+En Gravity Shift, **controlas la dirección de la GRAVEDAD**, no la bola. La bola se mueve según las leyes de la física dependiendo de la dirección de gravedad que establezcas.
+
+### 💡 Ejemplo:
+- Presionas **W** → La gravedad apunta hacia ARRIBA → La bola "cae" hacia arriba
+- Presionas **A** → La gravedad apunta hacia la IZQUIERDA → La bola "cae" hacia la izquierda
+- Presionas **S** → La gravedad apunta hacia ABAJO → La bola cae normalmente
+
+**Observa el indicador dorado en la parte superior** que muestra la dirección actual de la gravedad (↓ DOWN, ↑ UP, ← LEFT, → RIGHT).
+
 ## 🎮 Controles
 
 - **WASD / Flechas**: Cambiar dirección de la gravedad
@@ -15,10 +28,12 @@ Un juego de puzzle basado en física donde controlas la dirección de la graveda
 ## 🚀 Cómo Jugar
 
 1. Abre `index.html` en un navegador web moderno
-2. Usa WASD o las flechas para cambiar la gravedad
-3. Guía la bola hasta el cuadrado verde (meta)
-4. Recolecta estrellas para puntos extra
-5. Evita los pinchos y zonas de peligro
+2. **Observa** la bola azul cayendo por gravedad
+3. **Presiona WASD o flechas** para cambiar la dirección de la gravedad
+4. **Mira el indicador dorado** en la parte superior para ver la gravedad actual
+5. Usa la gravedad para guiar la bola hasta el cuadrado verde (meta)
+6. Recolecta estrellas doradas para puntos extra
+7. Evita los pinchos rojos y zonas naranjas de peligro
 
 ## 🎯 Objetivo
 
