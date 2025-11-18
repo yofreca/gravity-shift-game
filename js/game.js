@@ -44,6 +44,11 @@ class GameScene extends Phaser.Scene {
         // Setup event listeners
         this.events.on('levelComplete', this.onLevelComplete, this);
         this.events.on('starCollected', this.onStarCollected, this);
+
+        // Debug: Log when SPACE is pressed
+        this.keys.SPACE.on('down', () => {
+            console.log('⌨️ SPACE key detected! levelComplete:', this.levelComplete);
+        });
     }
 
     createHUD() {
@@ -239,13 +244,15 @@ class GameScene extends Phaser.Scene {
 
     update(time, delta) {
         // Handle next level (must be before levelComplete check)
-        if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE) && this.levelComplete) {
-            this.nextLevel();
+        if (this.levelComplete) {
+            if (Phaser.Input.Keyboard.JustDown(this.keys.SPACE)) {
+                console.log('🎮 SPACE pressed! Moving to next level...');
+                this.nextLevel();
+                return;
+            }
+            // Don't update game logic if level is complete
             return;
         }
-
-        // If level is complete, don't update game logic
-        if (this.levelComplete) return;
 
         // Handle gravity input
         this.physicsManager.handleGravityInput();
@@ -280,6 +287,7 @@ class GameScene extends Phaser.Scene {
         if (this.levelComplete) return;
 
         this.levelComplete = true;
+        console.log('🎉 Level Complete! Press SPACE to continue...');
 
         // Show completion message
         const completionText = this.add.text(CONFIG.WIDTH / 2, CONFIG.HEIGHT / 2,
